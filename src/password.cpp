@@ -1,4 +1,6 @@
+#include <iomanip>
 #include <string>
+#include <sstream>
 #include "SHAKE.h"
 #include "password.h"
 
@@ -47,7 +49,15 @@ std::string Password::generateHash(){
 	unsigned char* c_hash = new unsigned char[determineLength()];
 	shake.extend(c_hash,determineLength());
   	
-	std::string hash((char *)c_hash);
+	std::string hash = encodeHex(c_hash);
 	delete c_hash;
 	return hash;
+}
+
+std::string Password::encodeHex(const unsigned char* hash){
+	std::ostringstream oss;
+	for(unsigned int i = 0; i < determineLength(); ++i){
+		oss << std::hex << std::setw(2) << (unsigned int)((unsigned char)hash[i]);
+	}
+	return oss.str();
 }
