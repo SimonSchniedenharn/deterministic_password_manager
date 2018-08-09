@@ -18,5 +18,5 @@ class Password{
 		unsigned int determineLength();
 		unsigned int calculateStringSum();
 		std::string encodeHex(const unsigned char* hash);
-		std::string insertSpecialCharacters(std::string hash);
+		void insertSpecialCharacters(std::string &hash);
 };
