@@ -33,7 +33,7 @@ unsigned int Password::calculateStringSum(){
 	return service_sum + pin_sum + salt_sum;
 }
 
-std::string Password::insertSpecialCharacters(std::string hash){
+std::string Password::insertSpecialCharacters(std::string &hash){
 	unsigned int num_special_characters = hash.length()/SPECIAL_CHARACTER_DIVISOR;
 	for(unsigned int i = 0; i < num_special_characters; ++i){
 		hash[hash[i]%hash.length()] = special_characters[hash[i]%special_characters.length()];
@@ -57,7 +57,7 @@ std::string Password::generateHash(){
 std::string Password::encodeHex(const unsigned char* hash){
 	std::ostringstream oss;
 	for(unsigned int i = 0; i < determineLength(); ++i){
-		oss << std::hex << std::setw(2) << (unsigned int)((unsigned char)hash[i]);
+		oss << std::hex << std::setw(2) << std::setfill('0') << (unsigned int)((unsigned char)hash[i]);
 	}
 	return oss.str();
 }
