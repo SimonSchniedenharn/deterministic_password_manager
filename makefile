@@ -1,5 +1,5 @@
-all: password.o main.o shake.o xof.o keccakcore.o
-	g++ -std=c++11 -o bin/bin build/password.o build/main.o build/shake.o build/keccakcore.o build/xof.o
+all: password.o main.o shake.o xof.o keccakcore.o crypto.o
+	g++ -std=c++11 -o bin/bin build/password.o build/main.o build/shake.o build/keccakcore.o build/xof.o build/crypto.o
 
 password.o: src/password.cpp
 	g++ -std=c++11 -c src/password.cpp -o build/password.o -Iinclude/ -Iarduinolibs/libraries/Crypto
@@ -14,4 +14,7 @@ xof.o: arduinolibs/libraries/Crypto/XOF.cpp
 	g++ -std=c++11 -c arduinolibs/libraries/Crypto/XOF.cpp -Iarduinolibs/libraries/Crypto -o build/xof.o
 
 keccakcore.o: arduinolibs/libraries/Crypto/KeccakCore.cpp
-	g++ -std=c++11 -c arduinolibs/libraries/Crypto/KeccakCore.cpp -Iarduinolibs/libraries/Crypto -o build/keccakcore.o
+	g++ -std=c++11 -c arduinolibs/libraries/Crypto/KeccakCore.cpp -Iarduinolibs/libraries/Crypto -Iarduinolibs/libraries/Crypto/utility/ -o build/keccakcore.o
+
+crypto.o: arduinolibs/libraries/Crypto/Crypto.cpp
+	g++ -std=c++11 -c arduinolibs/libraries/Crypto/Crypto.cpp -Iarduinolibs/libraries/Crypto -Iarduinolibs/libraries/Crypto/utility/ -o build/crypto.o
