@@ -38,7 +38,6 @@ void Password::insertSpecialCharacters(std::string &hash){
 	for(unsigned int i = 0; i < num_special_characters; ++i){
 		hash[hash[i]%hash.length()] = special_characters[hash[i]%special_characters.length()];
 	}
-	return hash;
 }
 
 std::string Password::generateHash(){
