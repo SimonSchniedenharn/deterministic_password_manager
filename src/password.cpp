@@ -1,4 +1,6 @@
+#include <iomanip>
 #include <string>
+#include <sstream>
 #include "SHAKE.h"
 #include "password.h"
 
@@ -12,7 +14,7 @@ Password::Password(std::string service, unsigned int min_length, unsigned int ma
 
 unsigned int Password::determineLength(){
 	unsigned int diff_length = this->max_length - this->min_length;
-	return calculateStringSum()%(diff_length + 1);
+	return (min_length + calculateStringSum()%(diff_length + 1))/2;
 }
 
 unsigned int Password::calculateStringSum(){
@@ -31,12 +33,11 @@ unsigned int Password::calculateStringSum(){
 	return service_sum + pin_sum + salt_sum;
 }
 
-std::string Password::insertSpecialCharacters(std::string hash){
+void Password::insertSpecialCharacters(std::string &hash){
 	unsigned int num_special_characters = hash.length()/SPECIAL_CHARACTER_DIVISOR;
 	for(unsigned int i = 0; i < num_special_characters; ++i){
 		hash[hash[i]%hash.length()] = special_characters[hash[i]%special_characters.length()];
 	}
-	return hash;
 }
 
 std::string Password::generateHash(){
@@ -47,7 +48,18 @@ std::string Password::generateHash(){
 	unsigned char* c_hash = new unsigned char[determineLength()];
 	shake.extend(c_hash,determineLength());
   	
-	std::string hash((char *)c_hash);
+	std::string hash = encodeHex(c_hash);
+	if(has_special_characters){
+		insertSpecialCharacters(hash);
+	}
 	delete c_hash;
 	return hash;
+}
+
+std::string Password::encodeHex(const unsigned char* hash){
+	std::ostringstream oss;
+	for(unsigned int i = 0; i < determineLength(); ++i){
+		oss << std::hex << std::setw(2) << std::setfill('0') << (unsigned int)((unsigned char)hash[i]);
+	}
+	return oss.str();
 }
