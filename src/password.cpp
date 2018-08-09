@@ -12,7 +12,7 @@ Password::Password(std::string service, unsigned int min_length, unsigned int ma
 
 unsigned int Password::determineLength(){
 	unsigned int diff_length = this->max_length - this->min_length;
-	return calculateStringSum()%(diff_length + 1);
+	return (min_length + calculateStringSum()%(diff_length + 1))/2;
 }
 
 unsigned int Password::calculateStringSum(){
