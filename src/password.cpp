@@ -49,6 +49,9 @@ std::string Password::generateHash(){
 	shake.extend(c_hash,determineLength());
   	
 	std::string hash = encodeHex(c_hash);
+	if(has_special_characters){
+		insertSpecialCharacters(hash);
+	}
 	delete c_hash;
 	return hash;
 }
